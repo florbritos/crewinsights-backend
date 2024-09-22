@@ -16,3 +16,12 @@ class AccountRequestHandler(BaseHandler):
         else:
             self.set_status(400)
         self.write(response)
+
+    async def delete(self):
+        body = json.loads(self.request.body)
+        response = self.controller.logout(body)
+        if response.get("status") == "success":
+            self.set_status(200)
+        else:
+            self.set_status(400)
+        self.write(response)
