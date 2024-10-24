@@ -8,7 +8,7 @@ class Validation:
             "password": ["required:true", "type:string"],
             "id_user": ["required:true", "format:ObjectId"],
             "id_chat": ["required:true", "format:ObjectId"],
-            "message": ["required:true", "type:string"],
+            "question": ["required:true", "type:string"],
         }
 
     def validate_field(self, field, value):
@@ -20,14 +20,14 @@ class Validation:
             
             if rule_name == "type":
                 if rule_value == "number" and not isinstance(value, (int)):
-                    error = "Field must be an integer"
+                    error = "%s must be an integer" % field.capitalize()
                     break
                 if rule_value == "string" and not isinstance(value, (str)):
-                    error = "Field must be a text"
+                    error = "%s must be a text" % field.capitalize()
                     break
 
             if rule_name == "required" and (value is None or str(value).strip() == ""):
-                error = "This field cannot be empty"
+                error = "%s cannot be empty" % field.capitalize()
                 break
             
             if rule_name == "format":
@@ -36,7 +36,7 @@ class Validation:
                     error = "Invalid email format"
                     break
                 if rule_value == "ObjectId" and not ObjectId.is_valid(value):
-                    error = "Invalid ID format"
+                    error = "%s: Invalid ID format" % field.capitalize()
         return error
 
     def validate_object_fields(self, obj):

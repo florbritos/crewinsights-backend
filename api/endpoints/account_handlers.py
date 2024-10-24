@@ -10,7 +10,8 @@ class AccountRequestHandler(BaseHandler):
     async def post(self):
         ''''''
         login_info = json.loads(self.request.body)
-        response = self.controller.login(login_info)
+        sanitized_login_info = self.sanitize_input(login_info)
+        response = self.controller.login(sanitized_login_info)
         if response.get("status") == "success":
             self.set_status(200)
         else:
@@ -19,7 +20,8 @@ class AccountRequestHandler(BaseHandler):
 
     async def delete(self):
         body = json.loads(self.request.body)
-        response = self.controller.logout(body)
+        sanitized_body = self.sanitize_input(body)
+        response = self.controller.logout(sanitized_body)
         if response.get("status") == "success":
             self.set_status(200)
         else:

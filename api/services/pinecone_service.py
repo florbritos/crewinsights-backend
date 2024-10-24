@@ -10,14 +10,15 @@ class PineconeService():
     def __init__(self):
         self.pinecone_api_key = os.getenv('PINECONE_API_KEY')
         self.index_name = "pinecone-crewinsights"
-        self.embeddings = OpenAIEmbeddings(
-            model = "text-embedding-3-small"
-        )
-        self.vectorstore = PineconeVectorStore(embedding=self.embeddings, index_name=self.index_name)
         self.text_splitter = RecursiveCharacterTextSplitter()
 
+    def getVectorStore(self):
+        embedding = OpenAIEmbeddings(
+            model = "text-embedding-3-small"
+        )
+        return PineconeVectorStore(embedding=embedding, index_name=self.index_name)
+
     def save(self, report_dict):
-        ''' '''
         texts = []
         metadatas = []
         report_id = None
@@ -31,4 +32,4 @@ class PineconeService():
                     texts.append(chunk)
                     metadatas.append({"report_id": report_id, "chunk_index": i})
 
-        self.vectorstore.add_texts(texts=texts, metadatas=metadatas)
+        self.getVectorStore().add_texts(texts=texts, metadatas=metadatas)
