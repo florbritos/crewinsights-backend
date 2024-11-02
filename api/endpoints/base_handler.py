@@ -40,3 +40,10 @@ class BaseHandler(tornado.web.RequestHandler):
             return sanitized_value
         else:
             raise TypeError("Input must be a dictionary or a string.")
+        
+    def handleResponse(self, response):
+        if response.get("status") == "success":
+            self.set_status(200)
+        else:
+            self.set_status(400)
+        self.write(response)

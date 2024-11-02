@@ -1,13 +1,10 @@
-import json
 from api.services.crewbot_service import CrewBotService
 from api.classes.Validation import Validation
-from api.services.mongodb_service import MongoDB
 
 class CrewBotController:
     def __init__(self):
         self.service = CrewBotService()
         self.validation = Validation()
-        self.mongodb_service = MongoDB()
 
     def initChat(self, body):
         data = {

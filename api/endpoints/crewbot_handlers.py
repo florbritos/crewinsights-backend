@@ -32,14 +32,6 @@ class CrewBotRequestHandler(BaseHandler):
         response = self.controller.deleteChat(id_user, id_chat)
         self.handleResponse(response)
 
-
-    def handleResponse(self, response):
-        if response.get("status") == "success":
-            self.set_status(200)
-        else:
-            self.set_status(400)
-        self.write(response)
-
     def initChat(self):
         body = json.loads(self.request.body)
         sanitized_body = self.sanitize_input(body)

@@ -7,11 +7,8 @@ class ReportRequestHandler(BaseHandler):
     def initialize(self):
         self.controller = ReportController()
 
-    def get(self):
-        self.write("CrewInsights Server Running")
-
     def post(self):
-        '''Creates a flight report'''
-        report_dict = json.loads(self.request.body)
-        response = self.controller.create_report(report_dict)
-        self.write(response)
+        body = json.loads(self.request.body)
+        sanitized_body = self.sanitize_input(body)
+        response = self.controller.save(sanitized_body)
+        self.handleResponse(response)

@@ -18,18 +18,15 @@ class PineconeService():
         )
         return PineconeVectorStore(embedding=embedding, index_name=self.index_name)
 
-    def save(self, report_dict):
+    def save(self, id_report, data):
         texts = []
         metadatas = []
-        report_id = None
+        id_report = id_report
 
-        for key, text in report_dict.items():
-            if key == "id":
-                report_id = text
-            else: 
-                chunks = self.text_splitter.split_text(text)
-                for i, chunk in enumerate(chunks):
-                    texts.append(chunk)
-                    metadatas.append({"report_id": report_id, "chunk_index": i})
+        for key, text in data.items():
+            chunks = self.text_splitter.split_text(text)
+            for i, chunk in enumerate(chunks):
+                texts.append(chunk)
+                metadatas.append({"id_report": id_report, "chunk_index": i})
 
         self.getVectorStore().add_texts(texts=texts, metadatas=metadatas)
