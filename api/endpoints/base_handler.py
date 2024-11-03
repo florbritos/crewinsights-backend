@@ -44,6 +44,9 @@ class BaseHandler(tornado.web.RequestHandler):
     def handleResponse(self, response):
         if response.get("status") == "success":
             self.set_status(200)
+            print("response", response)
+            self.write(json.dumps(response))
         else:
             self.set_status(400)
-        self.write(response)
+            print(response)
+        

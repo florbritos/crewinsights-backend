@@ -3,6 +3,7 @@ import tornado.ioloop
 from api.endpoints.report_handlers import ReportRequestHandler
 from api.endpoints.account_handlers import AccountRequestHandler
 from api.endpoints.crewbot_handlers import CrewBotRequestHandler
+from api.endpoints.dashboard_handlers import DashboardRequestHandler
 from os import system
 
 class CrewInsightsServer():
@@ -13,6 +14,7 @@ class CrewInsightsServer():
             (r"/api/crewbot/user/([0-9a-fA-F]{24})", CrewBotRequestHandler),
             (r"/api/crewbot/user/([0-9a-fA-F]{24})/chat/([0-9a-fA-F]{24})", CrewBotRequestHandler),
             (r"/api/flight-report", ReportRequestHandler),
+            (r"/api/dashboard/([0-9a-fA-F]{24})", DashboardRequestHandler),
         ])
     
     def listen(self, port):

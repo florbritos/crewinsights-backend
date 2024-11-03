@@ -127,7 +127,6 @@ class Validation:
 
     def validate_object_fields(self, obj):
         list_errors = {}
-        print(obj)
         for field, value in obj.items():
             error = self.validate_field(field, value, obj)
             
