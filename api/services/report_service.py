@@ -5,12 +5,12 @@ from bson import ObjectId
 
 class ReportService:
     def __init__(self):
-        self.service_pinecone = PineconeService()
+        self.pinecone_service = PineconeService()
         
     def save(self, report):
         new_report = self.convert_bools_to_strings(report)
         id_report = str(ObjectId())
-        return self.service_pinecone.save(id_report, new_report)
+        return self.pinecone_service.save(id_report, new_report)
     
     def convert_bools_to_strings(self, data):
         return {key: str(value) if isinstance(value, bool) else value for key, value in data.items()}
@@ -21,5 +21,5 @@ class ReportService:
     #     loader = DirectoryLoader('doc', glob="**/*.pdf")
     #     docs = loader.load()
     #     split_docs = self.text_splitter.split_documents(docs)
-    #     #self.service_pinecone.from_documents(split_docs)
+    #     #self.pinecone_service.from_documents(split_docs)
     #     return {"status": "success", "message": "Documents loaded"}

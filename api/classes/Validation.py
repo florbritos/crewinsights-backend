@@ -9,6 +9,7 @@ class Validation:
             "password": ["required:true", "type:string"],
             "id_user": ["required:true", "format:ObjectId"],
             "id_chat": ["required:true", "format:ObjectId"],
+            "id_metric": ["required:true", "format:ObjectId"],
             "question": ["required:true", "type:string"],
             "flight_number": ["required:true"],
             "departure_airport": ["required:true", "format:iata"],

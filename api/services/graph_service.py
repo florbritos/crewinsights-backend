@@ -1,16 +1,24 @@
 from plotly import graph_objs as go
 import re
 import numpy as np
+import traceback
+from api.services.langchain_service import LangchainService
+import pandas as pd
 
 class GraphService:
-    def __init__(self, langchain_service):
-        self.langchain_service = langchain_service
+    def __init__(self):
+        self.langchain_service = LangchainService()
 
     def generate_graph(self, metric):
         local_vars = {}
-        metric += " Using Plotly library for visualization."
-        response = self.langchain_service.getAnswer(metric)
-        graph_code = response.get('answer', "")
+        #metric += " Please generate the code using Plotly library for visualization."
+        #response = self.langchain_service.getAnswer(metric)
+        #graph_code = response.get('answer', "")
+        similar_docs = self.langchain_service.getRelevantDocuments(metric)
+        analysis = self.langchain_service.analyzeReportBasedOnMetric(metric, similar_docs)
+        print(analysis)
+        graph_code = self.langchain_service.generatePlotlyInstruction(metric, analysis)
+        print(graph_code)
 
         try:
             python_code = re.search(r"```python(.*?)```", graph_code, re.DOTALL)
@@ -21,12 +29,11 @@ class GraphService:
             fig = local_vars.get('fig')
             if fig and isinstance(fig, go.Figure):
                 self.adjust_figure(fig)
-
-        except Exception as e:
-            print(f"ERROR: {e}")
+            return local_vars.get('fig')
+        except:
+            print(traceback.format_exc())
             print("No Python code block found in the provided text.")
-
-        return local_vars.get('fig')
+            return ""
 
     @staticmethod
     def clean_code(code):

@@ -7,16 +7,19 @@ class CrewBotController:
         self.validation = Validation()
 
     def initChat(self, body):
-        data = {
-            'id_user': body.get('id_user'),
-            'question': body.get('question')
-        }
-        errors = self.validation.validate_object_fields(data)
-        if bool(errors):
-            return {"status": "failed", "message": "Validation failed", "errors": errors}
+        try:
+            data = {
+                'id_user': body.get('id_user'),
+                'question': body.get('question')
+            }
+            errors = self.validation.validate_object_fields(data)
+            if bool(errors):
+                return {"status": "failed", "message": "Validation failed", "errors": errors}
 
-        response = self.service.initChat(data['id_user'], data['question'])
-        return {"status": "success", "message": "CrewBot replied successfully", "result": response}
+            response = self.service.initChat(data['id_user'], data['question'])
+            return {"status": "success", "message": "CrewBot replied successfully", "result": response}
+        except Exception as e:
+            return {"status": "failed", "message": "We encountered an issue with CrewBot", "errors": str(e)}
     
     def handleChat(self, body):
         try:

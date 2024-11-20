@@ -5,14 +5,20 @@ from langchain.schema import HumanMessage, AIMessage, SystemMessage
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
+from openai import OpenAI
+import traceback
+from dotenv import load_dotenv
+import os
 
 class LangchainService():
     def __init__(self):
+        load_dotenv()
         self.llm = ChatOpenAI(
-            model = "gpt-4o",
+            model = "gpt-4",
             temperature = 0
         )
         self.pinecone_service = PineconeService()
+        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     def createChain(self):
         prompt = ChatPromptTemplate.from_messages([
@@ -27,15 +33,18 @@ class LangchainService():
         )
 
         retriever_prompt = ChatPromptTemplate.from_messages([
+            ("system", "You are an assistant specialized in flight reports. Only retrieve information that answers the user's question, related to flights, technical details, or operational information. Do not return irrelevant data like names unless they are specifically mentioned in the query."),
             MessagesPlaceholder(variable_name="chat_history"),
-            ("human", "{input}"),
-            ("human", "Given he above conversation, generate a search query to look up in order to get information relevant to the conversation")
+            ("human", "{input}")            
         ])
 
         history_aware_retriever = create_history_aware_retriever(
             llm = self.llm,
-            retriever = self.pinecone_service.getVectorStore().as_retriever(),
-            prompt=retriever_prompt
+            retriever = self.pinecone_service.getVectorStore().as_retriever(
+                search_type="similarity", 
+                score_threshold=0.9
+            ),
+            prompt=retriever_prompt,
         )
         
         return create_retrieval_chain(
@@ -61,8 +70,54 @@ class LangchainService():
             "chat_history": new_chat_history
         })
 
+        if not response.get('context') or len(response.get('context', [])) == 0:
+            return {"question": message, "answer": "I did not find any relevant documentation about this subject."}
+
         return {"question": response.get('input'), "answer": response.get('answer')}
     
+    def getRelevantDocuments(self, user_request):
+        similar_docs = self.pinecone_service.getVectorStore().similarity_search(user_request, k=100)
+        return " ". join([doc.page_content for doc in similar_docs])
+
+    def analyzeReportBasedOnMetric(self, user_request, similar_docs):
+        prompt = (
+            "You are analyzing flight reports. Answer the user's questions based on the context of flights, delays, and other incidents. "
+            "If the user asks about delay causes, destinations, or frequencies, respond specifically in that format. "
+            f"User's question: {user_request}"
+        )
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-4",
+                messages=[
+                    {"role": "user", "content": f"{prompt}\n\nReport text: {similar_docs}"}
+                ]
+            )
+            return response.choices[0].message.content.strip()
+        except:
+            print(traceback.format_exc())
+            return ""
+        
+    def generatePlotlyInstruction(self, user_request, similar_docs):
+        prompt = (
+            f"Given the following text, generate only Python code using Plotly to create a single graph as per the user's request: '{user_request}'. "
+            "Create a separate bar chart for each category mentioned in the text, where each chart shows the frequency of each entity in its respective category. "
+            "Here is the text:\n\n"
+            f"{similar_docs}\n\n"
+            "Return only the necessary Python code for creating the charts using Plotly and nothing else. Avoid adding any text outside of the Python code."
+        )
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-4",
+                messages=[
+                    {"role": "user", "content": f"{prompt}"}
+                ]
+            )
+            plotly_code = response.choices[0].message.content.strip()
+            return plotly_code
+        except:
+            print(traceback.format_exc())
+            return ""
+
     def analyze_graph_image(self, base64_image):
         result = self.llm.invoke(
             [

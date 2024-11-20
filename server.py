@@ -14,7 +14,7 @@ class CrewInsightsServer():
             (r"/api/crewbot/user/([0-9a-fA-F]{24})", CrewBotRequestHandler),
             (r"/api/crewbot/user/([0-9a-fA-F]{24})/chat/([0-9a-fA-F]{24})", CrewBotRequestHandler),
             (r"/api/flight-report", ReportRequestHandler),
-            (r"/api/dashboard/([0-9a-fA-F]{24})", DashboardRequestHandler),
+            (r"/api/dashboard/user/([0-9a-fA-F]{24})", DashboardRequestHandler),
         ])
     
     def listen(self, port):
