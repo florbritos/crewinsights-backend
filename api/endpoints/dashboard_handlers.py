@@ -18,3 +18,10 @@ class DashboardRequestHandler(BaseHandler):
         sanitized_body = self.sanitize_input(body)
         response = self.controller.delete(sanitized_id_user, sanitized_body)
         self.handleResponse(response)
+
+    async def post(self, id_user):
+        sanitized_id_user = self.sanitize_input(id_user)
+        body = json.loads(self.request.body)
+        sanitized_body = self.sanitize_input(body)
+        response = self.controller.add(sanitized_id_user, sanitized_body)
+        self.handleResponse(response)

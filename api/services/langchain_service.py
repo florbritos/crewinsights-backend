@@ -3,12 +3,13 @@ from api.services.pinecone_service import PineconeService
 from langchain.chains import create_retrieval_chain
 from langchain.schema import HumanMessage, AIMessage, SystemMessage
 from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, PromptTemplate
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
 from openai import OpenAI
 import traceback
 from dotenv import load_dotenv
 import os
+import json
 
 class LangchainService():
     def __init__(self):
@@ -20,6 +21,8 @@ class LangchainService():
         self.pinecone_service = PineconeService()
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+    #### CrewBot ####
+    
     def createChain(self):
         prompt = ChatPromptTemplate.from_messages([
             ("system", "Answer the user's questions based on the context: {context}"),
@@ -74,7 +77,9 @@ class LangchainService():
             return {"question": message, "answer": "I did not find any relevant documentation about this subject."}
 
         return {"question": response.get('input'), "answer": response.get('answer')}
-    
+        
+    #### Dashboard ####
+
     def getRelevantDocuments(self, user_request):
         similar_docs = self.pinecone_service.getVectorStore().similarity_search(user_request, k=100)
         return " ". join([doc.page_content for doc in similar_docs])
@@ -83,6 +88,7 @@ class LangchainService():
         prompt = (
             "You are analyzing flight reports. Answer the user's questions based on the context of flights, delays, and other incidents. "
             "If the user asks about delay causes, destinations, or frequencies, respond specifically in that format. "
+            "Do not mention anything about generating graphics. "
             f"User's question: {user_request}"
         )
         try:
@@ -118,27 +124,49 @@ class LangchainService():
             print(traceback.format_exc())
             return ""
 
-    def analyze_graph_image(self, base64_image):
-        result = self.llm.invoke(
-            [
-                SystemMessage(
-                    content="You are an expert in data visualization that reads images of graphs and describes the data trends in those images. "
-                            "The graphs you will read are line charts that have multiple lines in them. Please pay careful attention to the "
-                            "legend color of each line and match them to the line color in the graph. The legend colors must match the line colors "
-                            "in the graph correctly."
-                ),
-                HumanMessage(
-                    content=[
-                        {"type": "text", "text": "What data insight can we get from this graph?"},
-                        {
-                            "type": "image_url",
-                            "image_url": {
-                                "url": f"data:image/jpeg;base64,{base64_image}",
-                                "detail": "auto"
-                            },
-                        },
-                    ]
-                )
-            ]
+    # def analyze_graph_image(self, base64_image):
+    #     result = self.llm.invoke(
+    #         [
+    #             SystemMessage(
+    #                 content="You are an expert in data visualization that reads images of graphs and describes the data trends in those images. "
+    #                         "The graphs you will read are line charts that have multiple lines in them. Please pay careful attention to the "
+    #                         "legend color of each line and match them to the line color in the graph. The legend colors must match the line colors "
+    #                         "in the graph correctly."
+    #             ),
+    #             HumanMessage(
+    #                 content=[
+    #                     {"type": "text", "text": "What data insight can we get from this graph?"},
+    #                     {
+    #                         "type": "image_url",
+    #                         "image_url": {
+    #                             "url": f"data:image/jpeg;base64,{base64_image}",
+    #                             "detail": "auto"
+    #                         },
+    #                     },
+    #                 ]
+    #             )
+    #         ]
+    #     )
+    #     return result.content or "No insights were generated from the image."
+
+    #### Report ####
+
+    def generateReportAsText(self, report):
+        prompt_template = PromptTemplate(
+            input_variables=["data"],
+            template="""
+            You are a system that converts flight reports into clear and detailed text.
+            Given the following dictionary of data, generate a professional report suitable for archival purposes.
+
+            Dictionary:
+            {data}
+
+            Generate the text in the following format:
+
+            Flight {{flight_number}} departed from {{departure_airport}} International Airport ...
+            """
         )
-        return result.content or "No insights were generated from the image."
+
+        report_json = json.dumps(report, indent=4)
+        prompt = prompt_template.format(data=report_json)
+        return self.llm.invoke(prompt)

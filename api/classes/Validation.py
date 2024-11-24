@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 class Validation:
     def __init__(self):
         self.field_rules = {
+            "token": ["required:true", "format:jwt"],
             "email": ["required:true", "format:email", "type:string"],
             "password": ["required:true", "type:string"],
             "id_user": ["required:true", "format:ObjectId"],
@@ -65,6 +66,11 @@ class Validation:
                         break
 
             if rule_name == "format":
+                if rule_value == "jwt":
+                    regex_jwt = r'^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$'
+                    if not re.match(regex_jwt, value):
+                        error = "Invalid JWT format"
+                        break
                 if rule_value == "email":
                     regex_email = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$'
                     if not re.match(regex_email, value):
@@ -101,6 +107,12 @@ class Validation:
                 if rule_value == "boolean":
                     if not isinstance(value, bool):
                         error = "This field must be true or False"
+                        break
+                if rule_value == "ObjectId":
+                    try:
+                        ObjectId(value)
+                    except Exception:
+                        error = "Invalid ObjectId format"
                         break
 
             if rule_name == "min":

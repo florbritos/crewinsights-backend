@@ -16,24 +16,26 @@ class GraphService:
         #graph_code = response.get('answer', "")
         similar_docs = self.langchain_service.getRelevantDocuments(metric)
         analysis = self.langchain_service.analyzeReportBasedOnMetric(metric, similar_docs)
+        print('#### analysis ####')
         print(analysis)
         graph_code = self.langchain_service.generatePlotlyInstruction(metric, analysis)
+        print('#### graph_code ####')
         print(graph_code)
 
         try:
-            python_code = re.search(r"```python(.*?)```", graph_code, re.DOTALL)
+            python_code = re.search(r"```python(.*?)```", graph_code, re.DOTALL | re.IGNORECASE)
             python_code = python_code.group(1).strip() if python_code else graph_code
             cleaned_code = self.clean_code(python_code)
-            exec(cleaned_code, {"go": go, "np": np}, local_vars)
+            exec(cleaned_code, {"go": go, "np": np, "pd": pd}, local_vars)
 
             fig = local_vars.get('fig')
             if fig and isinstance(fig, go.Figure):
                 self.adjust_figure(fig)
-            return local_vars.get('fig')
+            return analysis, local_vars.get('fig')
         except:
             print(traceback.format_exc())
             print("No Python code block found in the provided text.")
-            return ""
+            return analysis, ""
 
     @staticmethod
     def clean_code(code):

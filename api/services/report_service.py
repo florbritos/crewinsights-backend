@@ -1,25 +1,14 @@
-from .pinecone_service import PineconeService
-from langchain_community.document_loaders import DirectoryLoader
+from api.services.pinecone_service import PineconeService
+from api.services.langchain_service import LangchainService
 from bson import ObjectId
-
 
 class ReportService:
     def __init__(self):
         self.pinecone_service = PineconeService()
-        
-    def save(self, report):
-        new_report = self.convert_bools_to_strings(report)
-        id_report = str(ObjectId())
-        return self.pinecone_service.save(id_report, new_report)
-    
-    def convert_bools_to_strings(self, data):
-        return {key: str(value) if isinstance(value, bool) else value for key, value in data.items()}
+        self.langchain_service = LangchainService()
 
-    
-    # def load_pdf_reports(self):
-    #     '''Loads pdfs documents saved in computer to feed ai model'''
-    #     loader = DirectoryLoader('doc', glob="**/*.pdf")
-    #     docs = loader.load()
-    #     split_docs = self.text_splitter.split_documents(docs)
-    #     #self.pinecone_service.from_documents(split_docs)
-    #     return {"status": "success", "message": "Documents loaded"}
+    def save(self, report):
+        report_text = self.langchain_service.generateReportAsText(report)
+        print(report_text)
+        id_report = str(ObjectId())
+        return self.pinecone_service.save(id_report, report_text.content)

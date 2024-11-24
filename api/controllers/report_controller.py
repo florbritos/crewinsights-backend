@@ -1,11 +1,11 @@
 import json
 from ..services.report_service import ReportService
-from api.classes.Validation import Validation
+from api.controllers.base_controller import BaseController
 
-class ReportController:
+class ReportController(BaseController):
     def __init__(self):
+        super().__init__()
         self.service = ReportService()
-        self.validation = Validation()
 
     def save(self, report):
         try:

@@ -1,11 +1,11 @@
 import json
 from api.services.account_service import AccountService
-from api.classes.Validation import Validation
+from api.controllers.base_controller import BaseController
 
-class AccountController:
+class AccountController(BaseController):
     def __init__(self):
+        super().__init__()
         self.service = AccountService()
-        self.validation = Validation()
 
     def login(self, login_info):
         data = {
@@ -13,6 +13,7 @@ class AccountController:
             'password': login_info.get('password')
         }
         errors = self.validation.validate_object_fields(data)
+        print(errors)
         if bool(errors):
             return {"status": "failed", "message": "Validation failed", "errors": errors}
 

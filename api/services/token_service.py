@@ -13,4 +13,7 @@ class TokenService:
         self.mongodb_service.insertOne("Tokens", {"id_user": id_user, "token": token})
 
     def deleteToken(self, id_user):
-        self.mongodb_service.deleteOne('Tokens', {"id_user": id_user})
+        self.mongodb_service.deleteOne("Tokens", {"id_user": id_user})
+
+    def isValidToken(self, id_user, token):
+        return self.mongodb_service.findOne("Tokens", {"id_user": id_user, "token": token})

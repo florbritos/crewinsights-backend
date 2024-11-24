@@ -1,11 +1,11 @@
 import json
 from api.services.dashboard_service import DashboardService
-from api.classes.Validation import Validation
+from api.controllers.base_controller import BaseController
 
-class DashboardController:
+class DashboardController(BaseController):
     def __init__(self):
+        super().__init__()
         self.service = DashboardService()
-        self.validation = Validation()
 
     def getAllMetricsByUserId(self, id_user):
         try:
@@ -35,3 +35,20 @@ class DashboardController:
             return {"status": "success", "message": "Metric deleted successfully"}
         except Exception as e:
             return {"status": "failed", "message": "We encountered an issue while deleting a metric", "errors": str(e)}
+        
+    def add(self, id_user, body):
+        try:
+            data = {
+                'id_user': id_user,
+                'id_metric': body.get('id_metric'),
+                'metric': body.get('metric')
+            }
+
+            errors = self.validation.validate_object_fields(data)
+            if bool(errors):
+                return {"status": "failed", "message": "Validation failed", "errors": errors}
+            
+            self.service.add(data['id_user'], data['id_metric'], data['metric'])
+            return {"status": "success", "message": "Metric added successfully"}
+        except Exception as e:
+            return {"status": "failed", "message": "We encountered an issue while adding a new metric", "errors": str(e)}

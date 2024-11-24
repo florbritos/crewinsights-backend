@@ -8,7 +8,6 @@ class AccountRequestHandler(BaseHandler):
         self.controller = AccountController()
 
     async def post(self):
-        ''''''
         login_info = json.loads(self.request.body)
         sanitized_login_info = self.sanitize_input(login_info)
         response = self.controller.login(sanitized_login_info)

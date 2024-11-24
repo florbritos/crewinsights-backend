@@ -1,10 +1,10 @@
 from api.services.crewbot_service import CrewBotService
-from api.classes.Validation import Validation
+from api.controllers.base_controller import BaseController
 
-class CrewBotController:
+class CrewBotController(BaseController):
     def __init__(self):
+        super().__init__()
         self.service = CrewBotService()
-        self.validation = Validation()
 
     def initChat(self, body):
         try:

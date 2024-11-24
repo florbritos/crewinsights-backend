@@ -50,5 +50,9 @@ class MongoDB:
     def deleteOne(self, collection, filter):
         new_filter = self.updateFilter(filter)
         return self.db[collection].delete_one(new_filter)
+    
+    def findOne(self, collection, filter):
+        new_filter = self.updateFilter(filter)
+        return self.db[collection].find_one(new_filter)
 
     
