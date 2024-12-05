@@ -13,7 +13,6 @@ class AccountController(BaseController):
             'password': login_info.get('password')
         }
         errors = self.validation.validate_object_fields(data)
-        print(errors)
         if bool(errors):
             return {"status": "failed", "message": "Validation failed", "errors": errors}
 

@@ -15,7 +15,7 @@ class DashboardController(BaseController):
             errors = self.validation.validate_object_fields(data)
             if bool(errors):
                 return {"status": "failed", "message": "Validation failed", "errors": errors}
-            response = self.service.getAllMetricsByUserId(data['id_user'])
+            response = self.service.getDashboardByUserId(data['id_user'])
             return {"status": "success", "message": "Dashboard loaded successfully", "result": response}
         except Exception as e:
             return {"status": "failed", "message": "We encountered an issue while loading the dashboard", "errors": str(e)}
@@ -31,7 +31,7 @@ class DashboardController(BaseController):
             if bool(errors):
                 return {"status": "failed", "message": "Validation failed", "errors": errors}
             
-            self.service.delete(data['id_user'], data['id_metric'])
+            self.service.deleteMetricFromDashboard(data['id_user'], data['id_metric'])
             return {"status": "success", "message": "Metric deleted successfully"}
         except Exception as e:
             return {"status": "failed", "message": "We encountered an issue while deleting a metric", "errors": str(e)}
@@ -48,7 +48,7 @@ class DashboardController(BaseController):
             if bool(errors):
                 return {"status": "failed", "message": "Validation failed", "errors": errors}
             
-            self.service.add(data['id_user'], data['id_metric'], data['metric'])
+            self.service.addMetricToDashboard(data['id_user'], data['id_metric'], data['metric'])
             return {"status": "success", "message": "Metric added successfully"}
         except Exception as e:
             return {"status": "failed", "message": "We encountered an issue while adding a new metric", "errors": str(e)}

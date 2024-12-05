@@ -22,7 +22,7 @@ class BaseHandler(tornado.web.RequestHandler):
             self.set_header("Access-Control-Allow-Origin", origin)
         self.set_header("Access-Control-Allow-Credentials", "true")
         self.set_header("Access-Control-Allow-Headers", "x-requested-with, Content-Type, Authorization, CrewInsights-User-ID")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, DELETE, OPTIONS')
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, DELETE, PATCH, OPTIONS')
 
     def options(self, *args, **kwargs):
         self.set_status(200)
@@ -72,6 +72,7 @@ class BaseHandler(tornado.web.RequestHandler):
             self.write(response)
         else:
             self.set_status(400)
+            self.write(response)
             print(response)
 
 # class BaseHandler(tornado.web.RequestHandler):

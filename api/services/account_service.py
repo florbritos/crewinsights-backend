@@ -1,36 +1,20 @@
 from api.services.mongodb_service import MongoDB
 from api.services.token_service import TokenService
+from api.services.users_service import UsersService
+from api.services.password_service import PasswordService
 from api.classes.User import User
-import bcrypt 
 
 class AccountService:
     def __init__(self):
         self.mongodb_service = MongoDB()
         self.token_service = TokenService()
-
-    def getUserByEmail(self, email):
-        response = self.mongodb_service.getOneDocument("Users", {"email": email})
-        if response:
-            return User(
-                id_user=str(response.get("_id")),
-                first_name=response.get("first_name"),
-                last_name=response.get("last_name"),
-                dob=str(response.get("dob")),
-                address=response.get("address"),
-                email=response.get("email"),
-                password=response.get("password"),
-                nationality=response.get("nationality"),
-                passport=response.get("passport"),
-                contact_number=response.get("contact_number"),
-                job_title=response.get("job_title"),
-                role=response.get("role")
-            )
+        self.users_service = UsersService()
 
     def login(self, email, password):  
-        user = self.getUserByEmail(email)
+        user = self.users_service.getUserByEmail(email)
         if user:
             hashed_password = user.password
-            if bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8')):
+            if PasswordService.isPasswordCorrect(password, hashed_password):
                 token = self.token_service.createToken(user)
                 self.token_service.saveToken(user.id_user, token)
                 user_dict = user.getUserAsDict()

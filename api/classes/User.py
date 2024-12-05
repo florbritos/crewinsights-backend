@@ -1,5 +1,5 @@
 class User:
-    def __init__(self, id_user, first_name, last_name, dob, address, email, password, nationality, passport, contact_number, role, job_title):
+    def __init__(self, id_user, first_name, last_name, dob, address, email, password, nationality, passport, contact_number, role, job_title, avatar):
         self.id_user = id_user
         self.first_name = first_name
         self.last_name = last_name
@@ -12,6 +12,7 @@ class User:
         self.contact_number = contact_number
         self.role = role
         self.job_title = job_title
+        self.avatar = avatar
 
     def getUserAsDict(self):
         ''' '''
@@ -27,4 +28,5 @@ class User:
             "contact_number" : self.contact_number,
             "role" : self.role,
             "job_title" : self.job_title,
+            "avatar": self.avatar
         }

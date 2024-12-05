@@ -5,6 +5,16 @@ from datetime import datetime, timezone
 class Validation:
     def __init__(self):
         self.field_rules = {
+            'first_name':["required:true", 'type:string'],
+            'last_name':["required:true", 'type:string'],
+            'dob':["required:true", 'format:date'],
+            'address':["required:true", 'type:string'],
+            'nationality':["required:true", 'type:string'],
+            'passport':["required:true", 'type:string'],
+            'contact_number':["required:true", 'type:string'],
+            'job_title':["required:true", 'type:string'],
+            'avatar':["required:true", 'type:string'],
+            'role':["required:true", 'type:string'],
             "token": ["required:true", "format:jwt"],
             "email": ["required:true", "format:email", "type:string"],
             "password": ["required:true", "type:string"],
