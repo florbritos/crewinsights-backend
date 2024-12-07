@@ -3,6 +3,7 @@ import json
 from bson import ObjectId
 import bleach
 from api.controllers.token_controller import TokenController
+import os
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -20,6 +21,8 @@ class BaseHandler(tornado.web.RequestHandler):
         print("API called")
         origin = self.request.headers.get("Origin")
         print(origin)
+        print("HTTP_PROXY:", os.getenv("HTTP_PROXY"))
+        print("HTTPS_PROXY:", os.getenv("HTTPS_PROXY"))
         if origin in allowed_origins:
             self.set_header("Access-Control-Allow-Origin", origin)
         self.set_header("Access-Control-Allow-Credentials", "true")
