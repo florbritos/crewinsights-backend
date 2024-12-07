@@ -63,6 +63,8 @@ class UsersService:
             email_registered = self.getUserByEmail(new_data.get('email'))
             if email_registered:
                 return {"status": "failed", "message": "Validation failed", "errors": {"email": "Email already registered"}}
+        if new_data.get('password'):
+            new_data.update({'password': str(PasswordService.hashPassword(new_data['password']))})
         if new_data.get('role') == 'Admin':
             self.dashboard_service.createDashboard(id_user)
         if new_data.get('role') == 'Crew':

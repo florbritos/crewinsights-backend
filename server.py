@@ -6,12 +6,14 @@ from api.endpoints.crewbot_handlers import CrewBotRequestHandler
 from api.endpoints.dashboard_handlers import DashboardRequestHandler
 from api.endpoints.searchbot_handlers import SearchBotRequestHandler
 from api.endpoints.users_handlers import UsersRequestHandler
+from api.endpoints.password_recovery_handlers import PasswordRecoveryRequestHandler
 from os import system
 
 class CrewInsightsServer():
     def __init__(self):
         self.app =  tornado.web.Application([
             (r"/api/account/session", AccountRequestHandler),
+            (r"/api/password-recovery", PasswordRecoveryRequestHandler),
             (r"/api/crewbot/(.*)", CrewBotRequestHandler),
             (r"/api/crewbot/user/([0-9a-fA-F]{24})", CrewBotRequestHandler),
             (r"/api/crewbot/user/([0-9a-fA-F]{24})/chat/([0-9a-fA-F]{24})", CrewBotRequestHandler),

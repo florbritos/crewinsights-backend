@@ -29,7 +29,7 @@ class BaseHandler(tornado.web.RequestHandler):
         self.finish()
 
     def prepare(self):
-        if self.request.method == "OPTIONS" or self.request.uri == "/api/account/session":
+        if self.request.method == "OPTIONS" or self.request.uri == "/api/account/session" or self.request.uri == "/api/password-recovery":
             return
         self.validateToken()
 

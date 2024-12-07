@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 class Validation:
     def __init__(self):
         self.field_rules = {
+            'otp': ["required:true", 'format:int'],
             'first_name':["required:true", 'type:string'],
             'last_name':["required:true", 'type:string'],
             'dob':["required:true", 'format:date'],
