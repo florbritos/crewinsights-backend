@@ -18,11 +18,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def set_default_headers(self):
         allowed_origins = ["https://crewinsights-frontend.vercel.app", "http://192.168.0.19:3000"]
-        print("API called")
         origin = self.request.headers.get("Origin")
-        print(origin)
-        print("API KEYYYY BASE HANDLER")
-        print(os.getenv("OPENAI_API_KEY"))
         if origin in allowed_origins:
             self.set_header("Access-Control-Allow-Origin", origin)
         self.set_header("Access-Control-Allow-Credentials", "true")
