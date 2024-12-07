@@ -10,6 +10,7 @@ import traceback
 from dotenv import load_dotenv
 import os
 import json
+import openai
 
 class LangchainService():
     def __init__(self):
@@ -23,6 +24,7 @@ class LangchainService():
         #     temperature = 0
         # )
         #self.pinecone_service = PineconeService()
+        openai.proxy = None
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     #### CrewBot ####
