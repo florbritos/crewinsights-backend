@@ -16,7 +16,7 @@ class BaseHandler(tornado.web.RequestHandler):
         self.token_controller = TokenController()
 
     def set_default_headers(self):
-        allowed_origins = ["http://localhost:3000", "http://192.168.0.19:3000"]
+        allowed_origins = ["https://crewinsights-frontend.vercel.app/", "http://192.168.0.19:3000"]
         origin = self.request.headers.get("Origin")
         if origin in allowed_origins:
             self.set_header("Access-Control-Allow-Origin", origin)
