@@ -8,7 +8,6 @@ from api.endpoints.dashboard_handlers import DashboardRequestHandler
 from api.endpoints.searchbot_handlers import SearchBotRequestHandler
 from api.endpoints.users_handlers import UsersRequestHandler
 from api.endpoints.password_recovery_handlers import PasswordRecoveryRequestHandler
-from os import system
 
 class CrewInsightsServer():
     def __init__(self):
