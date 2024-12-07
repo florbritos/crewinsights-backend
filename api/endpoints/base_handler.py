@@ -21,8 +21,8 @@ class BaseHandler(tornado.web.RequestHandler):
         print("API called")
         origin = self.request.headers.get("Origin")
         print(origin)
-        print("HTTP_PROXY:", os.getenv("HTTP_PROXY"))
-        print("HTTPS_PROXY:", os.getenv("HTTPS_PROXY"))
+        print("API KEYYYY BASE HANDLER")
+        print(os.getenv("OPENAI_API_KEY"))
         if origin in allowed_origins:
             self.set_header("Access-Control-Allow-Origin", origin)
         self.set_header("Access-Control-Allow-Credentials", "true")
