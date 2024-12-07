@@ -1,11 +1,13 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from bson import ObjectId
-
+from dotenv import load_dotenv
+import os
 
 class MongoDB:
     def __init__(self):
-        self.uri = "mongodb://localhost:27017"
+        load_dotenv()
+        self.uri = os.getenv("MONGO_URL")
         self.client = MongoClient(self.uri, server_api=ServerApi('1'))
         self.db = self.client['DB_CREWINSIGHTS']
 

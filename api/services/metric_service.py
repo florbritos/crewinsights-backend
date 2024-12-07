@@ -1,6 +1,5 @@
 from api.services.graph_service import GraphService
 from api.services.mongodb_service import MongoDB
-import numpy as np
 import json
 
 class MetricService:

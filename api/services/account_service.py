@@ -2,7 +2,6 @@ from api.services.mongodb_service import MongoDB
 from api.services.token_service import TokenService
 from api.services.users_service import UsersService
 from api.services.password_service import PasswordService
-from api.classes.User import User
 
 class AccountService:
     def __init__(self):

@@ -13,8 +13,6 @@ class TokenController(BaseController):
         }
         errors = self.validation.validate_object_fields(data)
         if bool(errors):
-            print(errors)
             return False
         found = self.service.isValidToken(data['id_user'], data['token'])
-        print('No match between token and user id' if not found else '')
         return found

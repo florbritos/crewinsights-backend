@@ -1,7 +1,7 @@
 from langchain_openai import ChatOpenAI
 from api.services.pinecone_service import PineconeService
 from langchain.chains import create_retrieval_chain
-from langchain.schema import HumanMessage, AIMessage, SystemMessage
+from langchain.schema import HumanMessage, AIMessage
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, PromptTemplate
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
@@ -123,31 +123,6 @@ class LangchainService():
         except:
             print(traceback.format_exc())
             return ""
-
-    # def analyze_graph_image(self, base64_image):
-    #     result = self.llm.invoke(
-    #         [
-    #             SystemMessage(
-    #                 content="You are an expert in data visualization that reads images of graphs and describes the data trends in those images. "
-    #                         "The graphs you will read are line charts that have multiple lines in them. Please pay careful attention to the "
-    #                         "legend color of each line and match them to the line color in the graph. The legend colors must match the line colors "
-    #                         "in the graph correctly."
-    #             ),
-    #             HumanMessage(
-    #                 content=[
-    #                     {"type": "text", "text": "What data insight can we get from this graph?"},
-    #                     {
-    #                         "type": "image_url",
-    #                         "image_url": {
-    #                             "url": f"data:image/jpeg;base64,{base64_image}",
-    #                             "detail": "auto"
-    #                         },
-    #                     },
-    #                 ]
-    #             )
-    #         ]
-    #     )
-    #     return result.content or "No insights were generated from the image."
 
     #### Report ####
 

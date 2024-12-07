@@ -9,6 +9,5 @@ class ReportService:
 
     def save(self, report):
         report_text = self.langchain_service.generateReportAsText(report)
-        print(report_text)
         id_report = str(ObjectId())
         return self.pinecone_service.save(id_report, report_text.content)

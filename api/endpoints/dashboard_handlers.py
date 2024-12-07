@@ -1,4 +1,3 @@
-#import tornado.web
 from api.endpoints.base_handler import BaseHandler
 import json
 from api.controllers.dashboard_controller import DashboardController

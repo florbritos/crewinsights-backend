@@ -11,9 +11,6 @@ class GraphService:
 
     def generate_graph(self, metric):
         local_vars = {}
-        #metric += " Please generate the code using Plotly library for visualization."
-        #response = self.langchain_service.getAnswer(metric)
-        #graph_code = response.get('answer', "")
         similar_docs = self.langchain_service.getRelevantDocuments(metric)
         analysis = self.langchain_service.analyzeReportBasedOnMetric(metric, similar_docs)
         print('#### analysis ####')

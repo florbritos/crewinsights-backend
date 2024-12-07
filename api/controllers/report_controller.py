@@ -1,5 +1,4 @@
-import json
-from ..services.report_service import ReportService
+from api.services.report_service import ReportService
 from api.controllers.base_controller import BaseController
 
 class ReportController(BaseController):

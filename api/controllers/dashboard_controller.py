@@ -1,4 +1,3 @@
-import json
 from api.services.dashboard_service import DashboardService
 from api.controllers.base_controller import BaseController
 

@@ -56,7 +56,6 @@ class UsersController(BaseController):
                 'avatar': body.get("avatar")
             }
 
-            #data = {key: value for key, value in changes.items() if value not in [None, ""] and not str(value).isspace()}
             data = {key: value for key, value in changes.items() if key in body}          
             errors = self.validation.validate_object_fields(data)
             if bool(errors):

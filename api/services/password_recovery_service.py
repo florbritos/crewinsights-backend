@@ -17,8 +17,6 @@ class PasswordRecoveryService:
             smtp_port = 587 
             sender_email = os.getenv("SENDER_EMAIL")
             sender_password = os.getenv("EMAIL_PASSWORD")
-            print(sender_email)
-            print(sender_password)
             try:
                 subject = "CrewInsights - PASSWORD RECOVERY"
                 message = MIMEMultipart()
@@ -38,7 +36,6 @@ class PasswordRecoveryService:
                 server.sendmail(sender_email, email, message.as_string())
                 server.quit()
 
-                print(f"OTP sent successfully to {email}")
                 return {"status": "success", "message": "OTP sent successfully"}
             except Exception as e:
                 return {"status": "failed", "message": "Something went wront while trying to send otp to user"}

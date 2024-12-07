@@ -1,21 +1,7 @@
 import base64
-import os
-import time
-from plotly import graph_objs as go
 import io
 
 class ImageService:
-    # def __init__(self):
-    #     self.output_folder = os.path.join(os.path.dirname(__file__), "../graph_images")
-    #     os.makedirs(self.output_folder, exist_ok=True)
-
-    # def save_fig_to_image(self, fig, filename):
-    #     image_path = os.path.join(self.output_folder, filename)
-    #     fig_object = go.Figure(fig)
-    #     fig_object.write_image(image_path)
-    #     time.sleep(1)
-    #     return image_path
-
     @staticmethod
     def save_fig_to_image(fig):
         img_bytes = io.BytesIO()

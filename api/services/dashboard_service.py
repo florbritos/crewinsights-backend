@@ -1,8 +1,6 @@
 from api.services.mongodb_service import MongoDB
 from api.services.metric_service import MetricService
-import numpy as np
 import concurrent.futures
-import json
 from bson import ObjectId
 
 class DashboardService:

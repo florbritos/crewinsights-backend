@@ -1,4 +1,3 @@
-import json
 from api.services.password_recovery_service import PasswordRecoveryService
 from api.controllers.base_controller import BaseController
 

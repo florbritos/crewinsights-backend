@@ -1,4 +1,3 @@
-import json
 from api.services.account_service import AccountService
 from api.controllers.base_controller import BaseController
 

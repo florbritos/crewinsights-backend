@@ -1,4 +1,3 @@
-#import tornado.web
 from api.endpoints.base_handler import BaseHandler
 import json
 from api.controllers.searchbot_controller import SearchBotController
