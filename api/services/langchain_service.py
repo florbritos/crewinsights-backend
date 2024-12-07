@@ -19,6 +19,8 @@ class LangchainService():
             temperature = 0
         )
         self.pinecone_service = PineconeService()
+        print("API KEYYYY")
+        print(os.getenv("OPENAI_API_KEY"))
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     #### CrewBot ####
