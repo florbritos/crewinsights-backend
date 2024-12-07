@@ -1,3 +1,4 @@
+import os
 import tornado.web
 import tornado.ioloop
 from api.endpoints.report_handlers import ReportRequestHandler
@@ -28,8 +29,8 @@ class CrewInsightsServer():
         self.app.listen(port)
 
 if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8000))
     server = CrewInsightsServer()
-    server.listen(8888)
-    system("cls")
-    print("CrewInsights Server http://192.168.0.11:8888/")
+    server.listen(port)
+    print(f"CrewInsights Server running on port {port}")
     tornado.ioloop.IOLoop.current().start()
