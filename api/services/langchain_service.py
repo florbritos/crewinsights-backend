@@ -17,13 +17,13 @@ class LangchainService():
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
             raise EnvironmentError("OPENAI_API_KEY no está configurado.")
-        self.llm = ChatOpenAI(api_key=api_key)
+        #self.llm = ChatOpenAI(api_key=api_key)
         # self.llm = ChatOpenAI(
         #     model = "gpt-4",
         #     temperature = 0
         # )
         self.pinecone_service = PineconeService()
-        #self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     #### CrewBot ####
     
