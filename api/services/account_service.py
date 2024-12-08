@@ -24,6 +24,6 @@ class AccountService:
         else:
             return {"status": "failed", "message": "Validation failed", "errors": {"email": "Email not found"}}
         
-    def logout(self, id_user):
-        self.token_service.deleteToken(id_user)
+    def logout(self, id_user, token):
+        self.token_service.deleteToken(id_user, token)
         return {"status": "success", "message": "Logout successful"}

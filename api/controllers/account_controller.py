@@ -17,9 +17,12 @@ class AccountController(BaseController):
 
         return self.service.login(data['email'], data['password'])
     
-    def logout(self, body):
-        id_user = body.get("id_user")
-        error = self.validation.validate_field("id_user", id_user)
-        if error:
-            return {"status": "failed", "message": "Validation failed", "errors": error}
-        return self.service.logout(id_user)
+    def logout(self, token, body):
+        data = {
+            'id_user': body.get("id_user"),
+            'token': token
+        }
+        errors = self.validation.validate_object_fields(data)
+        if errors:
+            return {"status": "failed", "message": "Validation failed", "errors": errors}
+        return self.service.logout(data['id_user'], data['token'])

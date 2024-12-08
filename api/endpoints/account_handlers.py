@@ -13,7 +13,9 @@ class AccountRequestHandler(BaseHandler):
         self.handleResponse(response)
 
     async def delete(self):
+        token = self.request.headers.get("Authorization")
+        sanitized_token = self.sanitize_input(token)
         body = json.loads(self.request.body)
         sanitized_body = self.sanitize_input(body)
-        response = self.controller.logout(sanitized_body)
+        response = self.controller.logout(sanitized_token, sanitized_body)
         self.handleResponse(response)
