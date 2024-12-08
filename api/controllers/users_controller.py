@@ -34,7 +34,9 @@ class UsersController(BaseController):
             if bool(errors):
                 return {"status": "failed", "message": "Validation failed", "errors": errors}
             
-            self.service.createUser(data)
+            response = self.service.createUser(data)
+            if response:
+                return response
             return {"status": "success", "message": "User created successfully"}
         except Exception as e:
             return {"status": "failed", "message": "We encountered an issue while creating an user", "errors": str(e)}

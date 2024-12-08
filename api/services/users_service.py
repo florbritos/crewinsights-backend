@@ -52,7 +52,7 @@ class UsersService:
     def createUser(self, data):
         email_registered = self.getUserByEmail(data.get('email'))
         if email_registered:
-            raise Exception('Email already registered')
+            return {"status": "failed", "message": "Validation failed", "errors": {"email": "Email already registered"}}
         data.update({'password': str(PasswordService.hashPassword(data['password']))})
         id_user = self.mongodb_service.insertOne('Users', data)
         if data.get('role') == 'Admin':
